@@ -15,10 +15,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls.static import static
 from django.urls import path, include
+from django.conf import settings
+import mimetypes
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('api/', include('api.urls')),
-    path('', include('frontend.urls')),
+    path("api/", include("api.urls")),
+    path("", include("frontend.urls")),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+
+    mimetypes.add_type("application/javascript", ".js", True)
+    urlpatterns += [
+        path(r"^__debug__/", include(debug_toolbar.urls)),
+    ]
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
