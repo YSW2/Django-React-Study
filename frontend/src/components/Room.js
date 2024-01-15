@@ -1,6 +1,8 @@
 import React, { Component, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Grid, Button, Typography } from "@mui/material";
+import CreateRoomPage from "./CreateRoomPage";
+import { render } from "react-dom";
 
 function Room({ leaveRoomCallback }) {
   const navigate = useNavigate();
@@ -44,14 +46,41 @@ function Room({ leaveRoomCallback }) {
     setShowSettings(value);
   };
 
+  const renderSettings = () => {
+    return (
+      <Grid container spacing={1}>
+        <Grid item xs={12} align="center">
+          <CreateRoomPage
+            update={true}
+            votesToSkip={votesToSkip}
+            guestCanPause={guestCanPause}
+            roomCode={roomCode}
+            updateCallback={() => {}}
+          ></CreateRoomPage>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => updateShowSettings(false)}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  };
+
   const renderSettingsButton = () => {
     return (
       <Grid item xs={12} align="center">
         <Button
           variant="contained"
           color="primary"
-          onClick={() => this.updateShowSettings(true)}
-        ></Button>
+          onClick={() => updateShowSettings(true)}
+        >
+          Settings
+        </Button>
       </Grid>
     );
   };
@@ -59,6 +88,9 @@ function Room({ leaveRoomCallback }) {
     getRoomDetails();
   }, [roomCode]);
 
+  if (showSettings) {
+    return renderSettings();
+  }
   return (
     <Grid container spacing={1}>
       <Grid item xs={12} align="center">
@@ -81,6 +113,7 @@ function Room({ leaveRoomCallback }) {
           Host: {isHost ? "Yes" : "No"}
         </Typography>
       </Grid>
+      {isHost ? renderSettingsButton() : null}
       <Grid item xs={12} align="center">
         <Button
           variant="contained"
