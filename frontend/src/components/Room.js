@@ -51,11 +51,11 @@ function Room({ leaveRoomCallback }) {
       <Grid container spacing={1}>
         <Grid item xs={12} align="center">
           <CreateRoomPage
-            update={true}
-            votesToSkip={votesToSkip}
-            guestCanPause={guestCanPause}
-            roomCode={roomCode}
-            updateCallback={() => {}}
+            update_prop={true}
+            votesToSkip_prop={votesToSkip}
+            guestCanPause_prop={guestCanPause}
+            roomCode_prop={roomCode}
+            updateCallback={getRoomDetails}
           ></CreateRoomPage>
         </Grid>
         <Grid item xs={12} align="center">
