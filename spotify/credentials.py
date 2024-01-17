@@ -1,3 +1,1 @@
-CLIENT_ID = "f5303e6effc64691a95ff50648ea2352"
-CLIENT_SECRET = "6ac08743e3364798a4a04733a7fe1fd3"
-REDIRECT_URI = "http://localhost:8000/spotify/redirect"
+# own secret key
