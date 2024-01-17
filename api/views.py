@@ -27,9 +27,7 @@ class GetRoom(APIView):
             room = Room.objects.filter(code=code)
             if room.exists():
                 data = RoomSerializer(room[0]).data
-                data["is_host"] = (  # type:ignore
-                    self.request.session.session_key == room[0].host
-                )
+                data["is_host"] = self.request.session.session_key == room[0].host
                 return Response(data, status=status.HTTP_200_OK)
             return Response(
                 {"Room Not Found: Invalid Room Code."}, status=status.HTTP_404_NOT_FOUND
@@ -75,14 +73,14 @@ class CreateRoomView(APIView):
 
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            guest_can_pause = serializer.data.get("guest_can_pause")  # type: ignore
-            votes_to_skip = serializer.data.get("votes_to_skip")  # type: ignore
+            guest_can_pause = serializer.data.get("guest_can_pause")
+            votes_to_skip = serializer.data.get("votes_to_skip")
             host = self.request.session.session_key
             queryset = Room.objects.filter(host=host)
             if queryset.exists():
                 room = queryset[0]
-                room.guest_can_pause = guest_can_pause  # type: ignore
-                room.votes_to_skip = votes_to_skip  # type: ignore
+                room.guest_can_pause = guest_can_pause
+                room.votes_to_skip = votes_to_skip
                 room.save(update_fields=["guest_can_pause", "votes_to_skip"])
                 self.request.session["room_code"] = room.code
                 return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
@@ -129,9 +127,9 @@ class UpdateRoom(APIView):
     def patch(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            guest_can_pause = serializer.data.get("guest_can_pause")  # type: ignore
-            votes_to_skip = serializer.data.get("votes_to_skip")  # type:ignore
-            code = serializer.data.get("code")  # type:ignore
+            guest_can_pause = serializer.data.get("guest_can_pause")
+            votes_to_skip = serializer.data.get("votes_to_skip")
+            code = serializer.data.get("code")
 
             queryset = Room.objects.filter(code=code)
             if not queryset.exists():
@@ -145,8 +143,8 @@ class UpdateRoom(APIView):
                     {"msg": "You are not the host of this room"},
                     status=status.HTTP_403_FORBIDDEN,
                 )
-            room.guest_can_pause = guest_can_pause  # type:ignore
-            room.votes_to_skip = votes_to_skip  # type: ignore
+            room.guest_can_pause = guest_can_pause
+            room.votes_to_skip = votes_to_skip
             room.save(update_fields=["guest_can_pause", "votes_to_skip"])
             return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
 
