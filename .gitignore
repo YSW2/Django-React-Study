@@ -45,4 +45,4 @@ yarn-error.log
 ehthumbs.db
 Thumbs.db
 
-credentials.py
+spotify/credentials.py
